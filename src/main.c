@@ -1,3 +1,5 @@
+/* Program name : Chip-8 emulator */
+
 #include <stdio.h>
 #include "stdbool.h"
 #include "SDL2/SDL.h"
@@ -12,6 +14,8 @@ const char keyboard_map[CHIP8_TOTAL_KEYS] = {
 int main(int argc, char **argv)
 {
     struct chip8 chip8;
+    chip8_init(&chip8);
+
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_Window *window = SDL_CreateWindow(
         EMULATOR_WINDOW_TITLE,
@@ -41,7 +45,7 @@ int main(int argc, char **argv)
                 {
                     chip8_keyboard_down(&chip8.keyboard, vkey);
                 }
-            }
+            } /* End case SDL_KEYDOWN */
             break;
 
             case SDL_KEYUP:
@@ -52,13 +56,13 @@ int main(int argc, char **argv)
                 {
                     chip8_keyboard_up(&chip8.keyboard, vkey);
                 }
-            }
+            } /* End case SDL_KEYUP */
             break;
 
             default:
                 break;
-            }
-        }
+            } /* End switch statement */
+        } /* End nested while */
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
         SDL_RenderClear(renderer);
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 0);
@@ -69,9 +73,9 @@ int main(int argc, char **argv)
         r.h = 40;
         SDL_RenderDrawRect(renderer, &r);
         SDL_RenderPresent(renderer);
-    }
+    } /* End infinite while */
 
 out:
     SDL_DestroyWindow(window);
     return 0;
-}
+} /* End main function */

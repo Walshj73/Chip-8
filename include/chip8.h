@@ -1,3 +1,5 @@
+/* Program name : Chip-8 emulator */
+
 #ifndef CHIP8_H
 #define CHIP8_H
 
@@ -13,6 +15,8 @@ struct chip8
     struct chip8_stack stack;
     struct chip8_registers registers;
     struct chip8_keyboard keyboard;
-};
+}; /* End chip8 struct */
+
+void chip8_init(struct chip8* chip8);
 
 #endif

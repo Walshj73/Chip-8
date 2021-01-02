@@ -1,3 +1,5 @@
+/* Program name : Chip-8 emulator */
+
 #ifndef CHIP8REGISTERS_H
 #define CHIPREGISTERS_H
 
@@ -11,6 +13,6 @@ struct chip8_registers
     unsigned char sound_timer;
     unsigned short PC;
     unsigned char SP;
-};
+}; /* End registers struct */
 
 #endif

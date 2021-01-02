@@ -1,3 +1,5 @@
+/* Program name : Chip-8 emulator */
+
 #ifndef CONFIG_H
 #define CONFIG_H
 

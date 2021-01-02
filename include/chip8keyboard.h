@@ -1,3 +1,5 @@
+/* Program name : Chip-8 emulator */
+
 #ifndef CHIP8KEYBOARD_H
 #define CHIP8KEYBOARD_H
 
@@ -7,7 +9,7 @@
 struct chip8_keyboard
 {
     bool keyboard[CHIP8_TOTAL_KEYS];
-};
+}; /* End keyboard struct */
 
 int chip8_keyboard_map(const char *map, char key);
 void chip8_keyboard_down(struct chip8_keyboard *keyboard, int key);
