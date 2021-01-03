@@ -38,7 +38,7 @@ int main(int argc, char **argv)
     int res = fread(buf, size, 1, f);
     if (res != 1)
     {
-        printf("Failed to read from the file!");
+        printf("Failed to read from the file!\n");
         return -1;
     } /* End of if statement */
 
@@ -46,7 +46,11 @@ int main(int argc, char **argv)
     chip8_init(&chip8);
     chip8_load(&chip8, buf, size);
 
-    chip8_screen_draw_sprite(&chip8.screen, 0, 0, &chip8.memory.memory[0x05], 5);
+    chip8.registers.V[0] = 0x20;
+    chip8.registers.V[1] = 0x30;
+    chip8_exec(&chip8, 0x8010);
+    printf("%x\n", chip8.registers.V[0]);
+
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_Window *window = SDL_CreateWindow(
         EMULATOR_WINDOW_TITLE,
@@ -77,7 +81,7 @@ int main(int argc, char **argv)
                     chip8_keyboard_down(&chip8.keyboard, vkey);
                 }
             } /* End case SDL_KEYDOWN */
-            break;
+                break;
 
             case SDL_KEYUP:
             {
@@ -88,7 +92,7 @@ int main(int argc, char **argv)
                     chip8_keyboard_up(&chip8.keyboard, vkey);
                 }
             } /* End case SDL_KEYUP */
-            break;
+                break;
 
             default:
                 break;
@@ -129,8 +133,8 @@ int main(int argc, char **argv)
         } /* End of if statement */
 
         unsigned short opcode = chip8_memory_get_short(&chip8.memory, chip8.registers.PC);
-        chip8_exec(&chip8, opcode);
         chip8.registers.PC += 2;
+        chip8_exec(&chip8, opcode);
     } /* End infinite while */
 
 out:

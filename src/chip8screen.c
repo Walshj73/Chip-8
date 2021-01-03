@@ -1,12 +1,18 @@
 /* Program name : Chip-8 emulator */
 
-#include "chip8screen.h"
 #include <assert.h>
+#include <memory.h>
+#include "chip8screen.h"
 
 static void chip8_screen_check_bounds(int x, int y)
 {
     assert(x >= 0 && x < CHIP8_WIDTH && y >= 0 && y < CHIP8_HEIGHT);
 } /* End check bounds function */
+
+void chip8_screen_clear(struct chip8_screen* screen)
+{
+    memset(screen->pixels, 0, sizeof(screen->pixels));
+} /* End of screen clear function */
 
 void chip8_screen_set(struct chip8_screen* screen, int x, int y)
 {
@@ -33,7 +39,7 @@ bool chip8_screen_draw_sprite(struct chip8_screen* screen, int x, int y, const c
             {
                 continue;
             } /* End of if statement */
-            if (screen->pixels[(ly+y) % CHIP8_HEIGHT][(lx+x) % CHIP8_WIDTH] ^= true;)
+            if (screen->pixels[(ly+y) % CHIP8_HEIGHT][(lx+x) % CHIP8_WIDTH] ^= true)
             {
                 pixel_collison = true;
             } /* End of if statement */
