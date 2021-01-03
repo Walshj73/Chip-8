@@ -1,7 +1,8 @@
 /* Program name : Chip-8 emulator */
 
 #include <stdio.h>
-#include "stdbool.h"
+#include <stdbool.h>
+#include <Windows.h>
 #include "SDL2/SDL.h"
 #include "chip8.h"
 #include "chip8keyboard.h"
@@ -15,6 +16,7 @@ int main(int argc, char **argv)
 {
     struct chip8 chip8;
     chip8_init(&chip8);
+    chip8.registers.delay_timer = 255;
 
     chip8_screen_draw_sprite(&chip8.screen, 0, 0, &chip8.memory.memory[0x05], 5);
     SDL_Init(SDL_INIT_EVERYTHING);
@@ -85,6 +87,18 @@ int main(int argc, char **argv)
             } /* End nested for loop */
         } /* End for loop */
         SDL_RenderPresent(renderer);
+
+        if (chip8.registers.delay_timer > 0)
+        {
+            Sleep(100);
+            chip8.registers.delay_timer -= 1;
+        } /* End of if statement */
+
+        if (chip8.registers.sound_timer > 0)
+        {
+            Beep(15000, 100 * chip8.registers.sound_timer);
+            chip8.registers.sound_timer = 0;
+        } /* End of if statement */
     } /* End infinite while */
 
 out:
