@@ -1,8 +1,9 @@
 /* Program name : Chip-8 emulator */
 
-#include "chip8.h"
 #include <memory.h>
 #include <assert.h>
+#include <stdbool.h>
+#include "chip8.h"
 
 const char chip8_default_character_set[] = {
     0xf0, 0x90, 0x90, 0x90, 0xf0,
@@ -42,6 +43,7 @@ static void chip8_exec_extended(struct chip8* chip8, unsigned short opcode)
     unsigned char x = (opcode >> 8) & 0x000f;
     unsigned char y = (opcode >> 4) & 0x000f;
     unsigned char kk = opcode & 0x00ff;
+    unsigned short tmp = 0;
 
     switch (opcode & 0xf000)
     {
@@ -62,14 +64,14 @@ static void chip8_exec_extended(struct chip8* chip8, unsigned short opcode)
             {
                 chip8->registers.PC += 2;
             } /* End of if statement */
-
+            break;
         /* 4xkk : Skip next instruction if Vx != kk */
         case 0x4000:
             if (chip8->registers.V[x] != kk)
             {
                 chip8->registers.PC += 2;
             } /* End of if statement */
-
+            break;
         /* 5xy0 : Skip the next instruction if Vx = Vy */
         case 0x5000:
             if (chip8->registers.V[x] == chip8->registers.V[y])
@@ -96,7 +98,62 @@ static void chip8_exec_extended(struct chip8* chip8, unsigned short opcode)
                 case 0x00:
                     chip8->registers.V[x] = chip8->registers.V[y];
                     break;
+
+                /* 8xy1 : Set Vx = Vx OR Vy */
+                case 0x01:
+                    chip8->registers.V[x] = chip8->registers.V[x] |= chip8->registers.V[y];
+                    break;
+
+                /* 8xy2 : Set Vx = Vx AND Vy */
+                case 0x02:
+                    chip8->registers.V[x] = chip8->registers.V[x] &= chip8->registers.V[y];
+                    break;
+
+                /* 8xy3 : Set Vx = Vx XOR Vy */
+                case 0x03:
+                    chip8->registers.V[x] = chip8->registers.V[x] ^= chip8->registers.V[y];
+                    break;
+
+                /* 8xy4 : Set Vx = Vx + Vy, set VF = carry */
+                case 0x04:
+                    tmp = chip8->registers.V[x] + chip8->registers.V[y];
+                    chip8->registers.V[0x0f] = tmp > 0xff;
+                    chip8->registers.V[x] = tmp;
+                    break;
+
+                /* 8xy5 : Set Vx = Vx - Vy, Set VF = Not borrow */
+                case 0x05:
+                    chip8->registers.V[0x0f] = chip8->registers.V[x] > chip8->registers.V[y];
+                    chip8->registers.V[x] = chip8->registers.V[x] - chip8->registers.V[y];
+                    break;
+                
+                /* 8xy6 : Set Vx = Vx SHR 1 least-significant bit*/
+                case 0x06:
+                    chip8->registers.V[0x0f] = chip8->registers.V[x] & 0x01;
+                    chip8->registers.V[x] /= 2;
+                    break;
+
+                /* 8xy7 : Set Vx = Vy - Vx, Set VF = Not borrow */ 
+                case 0x07:
+                    chip8->registers.V[0x0f] = chip8->registers.V[y] > chip8->registers.V[x];
+                    chip8->registers.V[x] = chip8->registers.V[y] - chip8->registers.V[x];
+                    break;
+
+                /* 8xye : Set Vx = Vx SHL 1 most-significant bit */
+                case 0x0e:
+                    chip8->registers.V[0x0f] = chip8->registers.V[x] & 0x80;
+                    chip8->registers.V[x] *= 2;
+                    break;
             } /* End of nested switch */
+            break;
+
+        /* 9xy0 : Skip the next instruction if Vx != Vy */    
+        case 0x9000:
+            if (chip8->registers.V[x] != chip8->registers.V[y])
+            {
+                chip8->registers.PC += 2;
+            } /* End of nested if statement */
+            break;
     } /* End of switch statement */
 } /* End of exec extended function */
 
