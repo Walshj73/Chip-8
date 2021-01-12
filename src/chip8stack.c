@@ -1,4 +1,5 @@
-/* Program name : Chip-8 emulator */
+/* Program name : Chip-8 emulator 
+ * File name : chip8stack.c */
 
 #include "chip8stack.h"
 #include "chip8.h"

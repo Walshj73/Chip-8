@@ -1,8 +1,10 @@
-/* Program name : Chip-8 emulator */
+/* Program name : Chip-8 emulator 
+ * File name : main.c */
 
 #include <stdio.h>
 #include <stdbool.h>
 #include <Windows.h>
+
 #include "SDL2/SDL.h"
 #include "chip8.h"
 #include "chip8keyboard.h"
@@ -45,11 +47,7 @@ int main(int argc, char **argv)
     struct chip8 chip8;
     chip8_init(&chip8);
     chip8_load(&chip8, buf, size);
-
-    chip8.registers.V[0] = 0x20;
-    chip8.registers.V[1] = 0x30;
-    chip8_exec(&chip8, 0x8010);
-    printf("%x\n", chip8.registers.V[0]);
+    chip8_keyboard_set_map(&chip8.keyboard, keyboard_map);
 
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_Window *window = SDL_CreateWindow(
@@ -61,6 +59,7 @@ int main(int argc, char **argv)
         SDL_WINDOW_SHOWN);
 
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_TEXTUREACCESS_TARGET);
+
     while (1)
     {
         SDL_Event event;
@@ -75,7 +74,7 @@ int main(int argc, char **argv)
             case SDL_KEYDOWN:
             {
                 char key = event.key.keysym.sym;
-                int vkey = chip8_keyboard_map(keyboard_map, key);
+                int vkey = chip8_keyboard_map(&chip8.keyboard, key);
                 if (vkey != -1)
                 {
                     chip8_keyboard_down(&chip8.keyboard, vkey);
@@ -86,7 +85,7 @@ int main(int argc, char **argv)
             case SDL_KEYUP:
             {
                 char key = event.key.keysym.sym;
-                int vkey = chip8_keyboard_map(keyboard_map, key);
+                int vkey = chip8_keyboard_map(&chip8.keyboard, key);
                 if (vkey != -1)
                 {
                     chip8_keyboard_up(&chip8.keyboard, vkey);

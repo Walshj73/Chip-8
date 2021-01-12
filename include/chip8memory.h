@@ -1,4 +1,5 @@
-/* Program name : Chip-8 emulator */
+/* Program name : Chip-8 emulator 
+ * File name : chip8memory.h */
 
 #ifndef CHIP8MEMORY_H
 #define CHIP8MEMORY_H

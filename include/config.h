@@ -1,4 +1,5 @@
-/* Program name : Chip-8 emulator */
+/* Program name : Chip-8 emulator 
+ * File name : config.h */
 
 #ifndef CONFIG_H
 #define CONFIG_H
@@ -15,5 +16,6 @@
 #define CHIP8_TOTAL_STACK_DEPTH 16
 #define CHIP8_TOTAL_KEYS 16
 #define CHIP8_CHARACTER_SET_LOAD_ADDRESS 0x00
+#define CHIP8_DEFAULT_SPRITE_HEIGHT 5
 
 #endif

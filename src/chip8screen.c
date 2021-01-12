@@ -1,4 +1,5 @@
-/* Program name : Chip-8 emulator */
+/* Program name : Chip-8 emulator 
+ * File name : chip8screen.c */
 
 #include <assert.h>
 #include <memory.h>
@@ -39,7 +40,7 @@ bool chip8_screen_draw_sprite(struct chip8_screen* screen, int x, int y, const c
             {
                 continue;
             } /* End of if statement */
-            if (screen->pixels[(ly+y) % CHIP8_HEIGHT][(lx+x) % CHIP8_WIDTH] ^= true)
+            if (screen->pixels[(ly+y) % CHIP8_HEIGHT][(lx+x) % CHIP8_WIDTH])
             {
                 pixel_collison = true;
             } /* End of if statement */

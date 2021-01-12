@@ -1,4 +1,5 @@
-/* Program name : Chip-8 emulator */
+/* Program name : Chip-8 emulator 
+ * File name : chip8keyboard.c */
 
 #include "chip8keyboard.h"
 #include <assert.h>
@@ -8,11 +9,16 @@ static void chip8_keyboard_ensure_in_bounds(int key)
     assert(key >= 0 && key < CHIP8_TOTAL_KEYS);
 } /* End static void function */
 
-int chip8_keyboard_map(const char *map, char key)
+void chip8_keyboard_set_map(struct chip8_keyboard* keyboard, const char* map)
+{
+   keyboard->keyboard_map = map; 
+} /* End keyboard set map function */
+
+int chip8_keyboard_map(struct chip8_keyboard* keyboard, char key)
 {
     for (int i = 0; i < CHIP8_TOTAL_KEYS; i++)
     {
-        if (map[i] == key)
+        if (keyboard->keyboard_map[i] == key)
         {
             return i;
         } /* End if nested if statement */

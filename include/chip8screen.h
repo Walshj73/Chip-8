@@ -1,4 +1,5 @@
-/* Program name : Chip-8 emulator */
+/* Program name : Chip-8 emulator 
+ * File name : chip8screen.h */
 
 #ifndef CHIP8SCREEN_H
 #define CHIP8SCREEN_H
